@@ -7,6 +7,10 @@ const verifyToken = (req, res, next) => {
         return res.status(403).send({ message: "Aucun token fourni!" });
     }
 
+    if (token.startsWith('Bearer ')) {
+        token = token.slice(7, token.length);
+    }
+
     jwt.verify(token, process.env.SECRET, (err, decoded) => {
         if (err) {
             return res.status(401).send({ message: "Non autorisé!" });
