@@ -22,6 +22,7 @@ describe('Client Controller', () => {
     describe('POST /api/customers', () => {
         it('Tester la création d un nouveau client', async () => {
             const clientData = {
+                id: 1,
                 nom: 'Doe',
                 prenom: 'John',
                 date_naissance: "1989-12-31",
@@ -80,11 +81,23 @@ describe('Client Controller', () => {
         it('Tester la modification d un client', async () => {
             const clientData = { nom: 'Updated Doe', prenom: 'Updated John' };
             const response = await request(server)
-                .put('/api/customers/1')
+                .put('/api/customers/2')
                 .set("x-access-token", authToken)
                 .send(clientData);
             expect(response.statusCode).toBe(200);
             expect(response.body).toHaveProperty('nom', 'Updated Doe');
+        });
+    });
+
+    //  Teste de suppression de client
+    
+    describe('DELETE /api/customers/:clientId', () => {
+        it('Tester la suppression d un client', async () => {
+            const response = await request(server)
+                .delete('/api/customers/28')
+                .set("x-access-token", authToken)
+            expect(response.statusCode).toBe(200);
+            expect(response.body.message).toMatch(/supprimé avec succès/);
         });
     });
 
