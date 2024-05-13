@@ -1,7 +1,7 @@
 # Kawa_customer
 
 
-CREATE TABLE Client(
+CREATE TABLE Clients(
    id BYTE,
    nom VARCHAR(50),
    prenom VARCHAR(150),

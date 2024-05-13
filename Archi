@@ -1,0 +1,16 @@
+MonAPI/
+|-- node_modules/
+|-- src/
+|   |-- config/
+|   |   |-- db.config.js
+|   |-- controllers/
+|   |   |-- clientsController.js
+|   |-- models/
+|   |   |-- client.js
+|   |-- routes/
+|   |   |-- clientsRoutes.js
+|   ├── .env
+|   ├── .gitignore
+|   |-- app.js
+|-- package.json
+

@@ -22,7 +22,7 @@ Client.create = (newClient, result) => {
 };
 
 Client.findById = (clientId, result) => {
-    db.query(`SELECT * FROM clients WHERE id = ${clientId}`, (err, res) => {
+    db.query("SELECT * FROM clients WHERE id = ?", [clientId], (err, res) => {
         if(err) {
             console.log("erreur: ", err);
             result(err, null);
@@ -36,6 +36,7 @@ Client.findById = (clientId, result) => {
         result({ kind: "not_found" }, null);
     });
 };
+
 
 Client.getAll = result => {
     db.query("SELECT * FROM clients", (err, res) => {
