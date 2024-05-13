@@ -60,7 +60,7 @@ Client.updateById = (id, client, result) => {
                 return;
             }
             if(res.affectedRows == 0) {
-                // Utilisateur avec cet id n'a pas été trouvé
+                // le client avec cet id n'a pas été trouvé
                 result({ kind: "not_found" }, null);
                 return;
             }
