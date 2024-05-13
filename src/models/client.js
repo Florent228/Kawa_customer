@@ -3,10 +3,10 @@ const db = require('../config/db.config');
 const Client = function(client) {
     this.nom = client.nom;
     this.prenom = client.prenom;
-    this.dateNaissance = client.dateNaissance;
+    this.date_naissance = client.date_naissance;
     this.adresse = client.adresse;
     this.email = client.email;
-    this.motDePasse = client.motDePasse;
+    this.mot_de_passe = client.mot_de_passe;
 };
 
 Client.create = (newClient, result) => {
@@ -51,8 +51,8 @@ Client.getAll = result => {
 
 Client.updateById = (id, client, result) => {
     db.query(
-        "UPDATE clients SET nom = ?, prenom = ?, dateNaissance = ?, adresse = ?, email = ?, motDePasse = ? WHERE id = ?",
-        [client.nom, client.prenom, client.dateNaissance, client.adresse, client.email, client.motDePasse, id],
+        "UPDATE clients SET nom = ?, prenom = ?, date_naissance = ?, adresse = ?, email = ?, mot_de_passe = ? WHERE id = ?",
+        [client.nom, client.prenom, client.date_naissance, client.adresse, client.email, client.mot_de_passe, id],
         (err, res) => {
             if(err) {
                 console.log("erreur: ", err);

@@ -22,7 +22,7 @@ app.get("/", (req, res) => {
 const clientRoutes = require("./routes/clientsRoutes");
 
 // Utilisation des routes pour les utilisateurs
-app.use("/api/costomers", clientRoutes);
+app.use("/api", clientRoutes);
 
 
 const PORT = process.env.PORT || 3000;

@@ -10,16 +10,16 @@ exports.create = (req, res) => {
     }
 
     // Hacher le mot de passe
-    const hashedPassword = bcrypt.hashSync(req.body.motDePasse, 8);
+    const hashedPassword = bcrypt.hashSync(req.body.mot_de_passe, 8);
 
     // Créer un client
     const client = new Client({
         nom: req.body.nom,
         prenom: req.body.prenom,
-        dateNaissance: req.body.dateNaissance,
+        date_naissance: req.body.date_naissance,
         adresse: req.body.adresse,
         email: req.body.email,
-        motDePasse: bcrypt.hashSync(req.body.motDePasse, 8)
+        mot_de_passe: bcrypt.hashSync(req.body.mot_de_passe, 8)
     });
 
     // Sauvegarder le client dans la base de données
@@ -107,7 +107,7 @@ const jwt = require('jsonwebtoken');
 // Authentification d'un client
 exports.login = (req, res) => {
     const email = req.body.email;
-    const motDePasse = req.body.motDePasse;
+    const mot_de_passe = req.body.mot_de_passe;
 
     Client.findByEmail(email, (err, client) => {
         if (err) {
@@ -118,7 +118,7 @@ exports.login = (req, res) => {
             }
         }
 
-        const passwordIsValid = bcrypt.compareSync(motDePasse, client.motDePasse);
+        const passwordIsValid = bcrypt.compareSync(mot_de_passe, client.mot_de_passe);
 
         if (!passwordIsValid) {
             return res.status(401).send({
