@@ -2,9 +2,7 @@ const request = require('supertest');
 const app = require('../app');
 const jwt = require('jsonwebtoken');
 const Client = require('../models/client');
-const dbConn = require('../config/db.config');
-
-jest.setTimeout(50000); // Augmenter le timeout global pour Jest
+const db = require('../config/db.config');
 
 describe('Application Tests', () => {
     let server;
@@ -56,7 +54,7 @@ describe('Application Tests', () => {
     });
 
     describe('Client Controller Tests', () => {
-        it('should create a new client', async () => {
+        it('Tester la création d un nouveau client', async () => {
             const clientData = {
                 nom: 'Doe',
                 prenom: 'John',
@@ -70,7 +68,7 @@ describe('Application Tests', () => {
             expect(response.body).toHaveProperty('id');
         });
 
-        it('should authenticate and create a token', async () => {
+        it('Tester l authentification et la création du token', async () => {
             const loginData = {
                 email: 'florent@gmail.com',
                 mot_de_passe: 'Florent228'
@@ -80,7 +78,7 @@ describe('Application Tests', () => {
             expect(response.body).toHaveProperty('accessToken');
         });
 
-        it('should return 401 when the password is invalid', async () => {
+        it('Tester le retour du code 401 quand le mot de passe est invalide', async () => {
             const loginData = {
                 email: 'florent@gmail.com',
                 mot_de_passe: 'wrongpassword'
@@ -89,7 +87,7 @@ describe('Application Tests', () => {
             expect(response.statusCode).toBe(401);
         });
 
-        it('should retrieve clients with the provided token', async () => {
+        it('Tester la recuperation des client avec le token fourni', async () => {
             const response = await request(server)
                 .get('/api/customers')
                 .set("x-access-token", authToken);
@@ -97,12 +95,12 @@ describe('Application Tests', () => {
             expect(Array.isArray(response.body)).toBe(true);
         });
 
-        it('should return 403 if no token is provided', async () => {
+        it('Tester le retour de l erreur 403 en cas d absence de token', async () => {
             const response = await request(server).get('/api/customers');
             expect(response.statusCode).toBe(403);
         });
 
-        it('should update a client', async () => {
+        it('Tester la modification d un client', async () => {
             const clientData = { nom: 'Updated Doe', prenom: 'Updated John' };
             const response = await request(server)
                 .put('/api/customers/2')
@@ -112,7 +110,7 @@ describe('Application Tests', () => {
             expect(response.body).toHaveProperty('nom', 'Updated Doe');
         });
 
-        it('should delete a client', async () => {
+        it('Tester la suppression d un client', async () => {
             const newClient = {
                 nom: 'ToBeDeleted',
                 prenom: 'Client',
@@ -167,7 +165,7 @@ describe('Application Tests', () => {
     describe('Client Model Tests', () => {
         // Mock de la base de données
         beforeAll(() => {
-            dbConn.query = jest.fn();
+            db.query = jest.fn();
         });
 
         it('should create a client successfully', (done) => {
@@ -180,7 +178,7 @@ describe('Application Tests', () => {
                 mot_de_passe: 'hashedpassword'
             });
 
-            dbConn.query.mockImplementation((query, values, callback) => {
+            db.query.mockImplementation((query, values, callback) => {
                 callback(null, { insertId: 1 });
             });
 
@@ -192,7 +190,7 @@ describe('Application Tests', () => {
         });
 
         it('should find a client by id successfully', (done) => {
-            dbConn.query.mockImplementation((query, values, callback) => {
+            db.query.mockImplementation((query, values, callback) => {
                 callback(null, [{ id: 1, nom: 'Doe', prenom: 'John', date_naissance: '1989-12-31', adresse: '123 Main St', email: 'john.doe@example.com', mot_de_passe: 'hashedpassword' }]);
             });
 
@@ -204,7 +202,7 @@ describe('Application Tests', () => {
         });
 
         it('should return error if client not found by id', (done) => {
-            dbConn.query.mockImplementation((query, values, callback) => {
+            db.query.mockImplementation((query, values, callback) => {
                 callback(null, []);
             });
 
@@ -216,7 +214,7 @@ describe('Application Tests', () => {
         });
 
         it('should get all clients successfully', (done) => {
-            dbConn.query.mockImplementation((query, callback) => {
+            db.query.mockImplementation((query, callback) => {
                 callback(null, [{ id: 1, nom: 'Doe', prenom: 'John', date_naissance: '1989-12-31', adresse: '123 Main St', email: 'john.doe@example.com', mot_de_passe: 'hashedpassword' }]);
             });
 
@@ -238,7 +236,7 @@ describe('Application Tests', () => {
                 mot_de_passe: 'newhashedpassword'
             });
 
-            dbConn.query.mockImplementation((query, values, callback) => {
+            db.query.mockImplementation((query, values, callback) => {
                 callback(null, { affectedRows: 1 });
             });
 
@@ -259,7 +257,7 @@ describe('Application Tests', () => {
                 mot_de_passe: 'newhashedpassword'
             });
 
-            dbConn.query.mockImplementation((query, values, callback) => {
+            db.query.mockImplementation((query, values, callback) => {
                 callback(null, { affectedRows: 0 });
             });
 
@@ -271,7 +269,7 @@ describe('Application Tests', () => {
         });
 
         it('should find a client by email successfully', (done) => {
-            dbConn.query.mockImplementation((query, callback) => {
+            db.query.mockImplementation((query, callback) => {
                 callback(null, [{ id: 1, nom: 'Doe', prenom: 'John', date_naissance: '1989-12-31', adresse: '123 Main St', email: 'john.doe@example.com', mot_de_passe: 'hashedpassword' }]);
             });
 
@@ -283,7 +281,7 @@ describe('Application Tests', () => {
         });
 
         it('should return error if client not found by email', (done) => {
-            dbConn.query.mockImplementation((query, callback) => {
+            db.query.mockImplementation((query, callback) => {
                 callback(null, []);
             });
 
@@ -295,7 +293,7 @@ describe('Application Tests', () => {
         });
 
         it('should remove a client by id successfully', (done) => {
-            dbConn.query.mockImplementation((query, values, callback) => {
+            db.query.mockImplementation((query, values, callback) => {
                 callback(null, { affectedRows: 1 });
             });
 
@@ -307,7 +305,7 @@ describe('Application Tests', () => {
         });
 
         it('should return error if client to remove is not found by id', (done) => {
-            dbConn.query.mockImplementation((query, values, callback) => {
+            db.query.mockImplementation((query, values, callback) => {
                 callback(null, { affectedRows: 0 });
             });
 
