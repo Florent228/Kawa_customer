@@ -5,6 +5,8 @@ MonAPI/
 |   |   |-- db.config.js
 |   |-- controllers/
 |   |   |-- clientsController.js
+|   |-- middleware/
+|   |   |-- authjwt.js
 |   |-- models/
 |   |   |-- client.js
 |   |-- routes/
