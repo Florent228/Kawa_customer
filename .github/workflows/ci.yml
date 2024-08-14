@@ -12,16 +12,40 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: test_db
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3 
+        uses: actions/checkout@v3
+
       - name: Setup Node.js
-        uses: actions/setup-node@v3  
+        uses: actions/setup-node@v3
         with:
-          node-version: '20'  
+          node-version: '20'
 
       - name: Install dependencies
         run: npm install
 
+      - name: Wait for MySQL to be ready
+        run: |
+          until mysqladmin ping -h "127.0.0.1" --silent; do echo "Waiting for MySQL..."; sleep 2; done
+
       - name: Run tests
+        env:
+          DB_HOST: 127.0.0.1
+          DB_USER: root
+          DB_PASSWORD: root
+          DB_NAME: api
         run: npm test
