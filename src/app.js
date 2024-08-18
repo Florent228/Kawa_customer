@@ -21,8 +21,12 @@ app.get("/", (req, res) => {
 // Import des routes pour les clients
 const clientRoutes = require("./routes/clientsRoutes");
 
+const authRoutes = require("./routes/authRoutes");
+
 // Utilisation des routes pour les utilisateurs
 app.use("/api", clientRoutes);
 
+// Utiliser les routes
+app.use("/api/auth", authRoutes);
 
 module.exports = app;
