@@ -45,3 +45,12 @@ jobs:
         with:
           name: jest-results
           path: ./test-results # Assuming Jest results are stored here
+
+      - name: Run tests
+        env:
+          DB_HOST: mysql-florent.alwaysdata.net
+          DB_USER: florent
+          DB_PASSWORD: Fl@rent228
+          DB_NAME: florent_api
+          SECRET: VotreCleSecrete
+        run: npm run test
