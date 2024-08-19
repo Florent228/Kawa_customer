@@ -40,12 +40,12 @@ jobs:
 
       - name: Wait for MySQL to be ready
         run: |
-          until mysqladmin ping -h "127.0.0.1" --silent; do echo "Waiting for MySQL..."; sleep 2; done
+          until mysqladmin ping -h "mysql-florent.alwaysdata.net" --silent; do echo "Waiting for MySQL..."; sleep 2; done
 
       - name: Run tests
         env:
-          DB_HOST: 127.0.0.1
-          DB_USER: root
-          DB_PASSWORD: root
-          DB_NAME: api
-        run: npm test
+          DB_HOST: mysql-florent.alwaysdata.net
+          DB_USER: DB_USER=florent
+          DB_PASSWORD: Fl@rent228
+          DB_NAME: florent_api
+        run: npm run test
