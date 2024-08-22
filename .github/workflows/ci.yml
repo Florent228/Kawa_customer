@@ -84,5 +84,5 @@ jobs:
 
       - name: Merge origin/dev into master
         run: |
-          git merge origin/dev --no-ff --allow-unrelated-histories --commit -m "Fusion automatisée de dev en master"
+          git merge origin/dev --no-ff --allow-unrelated-histories --commit -m "Automated merge of dev into master"
           git push origin master
