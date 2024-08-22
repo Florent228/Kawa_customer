@@ -85,4 +85,3 @@ jobs:
           git checkout main
           git merge dev --no-ff --allow-unrelated-histories --commit -m "Automated merge of dev into main"
           git push origin main
-      
