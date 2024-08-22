@@ -91,14 +91,16 @@ jobs:
         with:
           ref: master
 
+      - name: Fetch all branches
+        run: git fetch origin
+
       - name: Configure git
         run: |
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
 
-      - name: Merge dev into master
+      - name: Merge origin/dev into master
         run: |
-          git fetch origin
           git checkout master
-          git merge dev --no-ff --allow-unrelated-histories --commit -m "Automated merge of dev into master"
+          git merge origin/dev --no-ff --allow-unrelated-histories --commit -m "Automated merge of dev into master"
           git push origin master
