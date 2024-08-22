@@ -25,6 +25,21 @@ describe('Tests de l\'Application', () => {
         await new Promise(resolve => server.close(resolve));
     });
 
+    // Après tous les tests, fermer la connexion à la base de données
+    afterAll(() => {
+        return new Promise((resolve, reject) => {
+            dbConn.end((err) => {
+                if (err) {
+                    console.error('Erreur lors de la fermeture de la connexion à la base de données:', err);
+                    return reject(err);
+                }
+                console.log('Connexion à la base de données fermée.');
+                resolve();
+            });
+        });
+    });
+    
+
     describe('Tests de l\'Application', () => {
         // Test de l'endpoint GET / qui doit retourner un message de bienvenue
         it('devrait retourner un message de bienvenue sur GET /', async () => {
