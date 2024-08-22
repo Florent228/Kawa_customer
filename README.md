@@ -228,3 +228,7 @@ npm run test
 ## License
 
 Ce projet est sous licence MIT.
+
+## Auteur
+
+Florent ATCHEAKOU
