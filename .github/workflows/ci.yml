@@ -52,7 +52,6 @@ jobs:
           lower_repo_owner=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
           docker tag kawa_customer:latest ghcr.io/${lower_repo_owner}/kawa_customer:latest
           docker push ghcr.io/${lower_repo_owner}/kawa_customer:latest
-        
 
       - name: Clean up Docker images
         run: |
@@ -61,8 +60,28 @@ jobs:
           else
             echo "Image kawa_customer:latest not found. Skipping cleanup."
           fi
-      
 
       - name: Display Docker image path
         run: echo "ghcr.io/${{ github.repository_owner }}/kawa_customer:latest"
-# End of file
+
+  merge-to-main:
+    needs: build-and-push-docker
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/dev'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: dev
+
+      - name: Configure git
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+
+      - name: Merge dev into main
+        run: |
+          git fetch origin
+          git checkout main
+          git merge dev --no-ff --commit -m "Automated merge of dev into main"
+          git push origin main
