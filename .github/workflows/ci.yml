@@ -1,27 +1,31 @@
-name: Node.js CI
+name: CI/CD Workflow for Node.js Project
+run-name: ${{ github.actor }} is testing out GitHub Actions
 
-on:
+permissions: write-all
+
+on: 
   push:
-    branches: [ dev ]
-  pull_request:
-    branches: [ dev ]
+    branches: [dev]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [14.x, 20.x]
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Node.js ${{ matrix.node-version }}
+      - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: '20'
+
+      - name: Cache npm
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
 
       - name: Install dependencies
         run: npm install
@@ -29,28 +33,28 @@ jobs:
       - name: Run tests
         run: npm test
 
-      # Optional: Add cache for node_modules to speed up workflow
-      - name: Cache Node.js modules
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+  build-and-push-docker:
+    needs: build-and-test
+    runs-on: ubuntu-latest
 
-      # Optional: Upload test results for further analysis or CI insights
-      - name: Upload Jest Test Results
-        if: always() # This ensures the step runs even if tests fail
-        uses: actions/upload-artifact@v2
-        with:
-          name: jest-results
-          path: ./test-results # Assuming Jest results are stored here
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      - name: Run tests
-        env:
-          DB_HOST: mysql-florent.alwaysdata.net
-          DB_USER: florent
-          DB_PASSWORD: Fl@rent228
-          DB_NAME: florent_api
-          SECRET: VotreCleSecrete
-        run: npm run test
+      - name: Log in to GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build Docker image
+        run: docker build -t kawa_customer:latest .
+
+      - name: Push Docker image
+        run: |
+          docker tag kawa_customer:latest ghcr.io/${{ github.repository_owner }}/kawa_customer:latest
+          docker push ghcr.io/${{ github.repository_owner }}/kawa_customer:latest
+
+      - name: Clean up Docker images
+        run: docker rmi kaw_customer:latest
+
+      - name: Display Docker image path
+        run: echo "ghcr.io/${{ github.repository_owner }}/kawa_customer:latest"
+# End of file

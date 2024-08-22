@@ -17,7 +17,7 @@ describe('Tests de l\'Application', () => {
         const loginResponse = await request(server)
             .post('/api/login')
             .send({ email: 'florent@gmail.com', mot_de_passe: 'Florent228' });
-        authToken = loginResponse.body.accessToken;  // Stocker le token pour les tests suivants
+        authToken = loginResponse.body.accessToken; 
     }, 10000);
 
     // Après chaque test, arrêter le serveur
