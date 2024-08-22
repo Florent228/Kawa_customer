@@ -82,7 +82,7 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
 
-      - name: Merge origin/dev into master
+      - name: Force merge dev into master
         run: |
-          git merge origin/dev --no-ff --allow-unrelated-histories --commit -m "Fusion automatisée de dev dans Master"
-          git push origin master
+          git merge origin/dev --no-ff --allow-unrelated-histories --commit -m "Fusion automatisée de dev dans Master" || true
+          git push origin master --force
