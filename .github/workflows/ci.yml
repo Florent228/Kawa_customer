@@ -63,26 +63,9 @@ jobs:
 
       - name: Display Docker image path
         run: echo "ghcr.io/${{ github.repository_owner }}/kawa_customer:latest"
-        
-  create-master-branch:
-    needs: build-and-push-docker
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/dev'
-    steps:
-      - name: Checkout dev branch
-        uses: actions/checkout@v2
-        with:
-          ref: dev
-
-      - name: Create master branch if it doesn't exist
-        run: |
-          if ! git rev-parse --verify origin/master; then
-            git checkout -b master
-            git push origin master
-          fi
 
   merge-to-master:
-    needs: [create-master-branch]
+    needs: [build-and-push-docker]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/dev'
     steps:
@@ -91,14 +74,15 @@ jobs:
         with:
           ref: master
 
+      - name: Fetch all branches
+        run: git fetch origin
+
       - name: Configure git
         run: |
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
 
-      - name: Merge dev into master
+      - name: Merge origin/dev into master
         run: |
-          git fetch origin
-          git checkout master
-          git merge dev --no-ff --allow-unrelated-histories --commit -m "Automated merge of dev into master"
+          git merge origin/dev --no-ff --allow-unrelated-histories --commit -m "Automated merge of dev into master"
           git push origin master
