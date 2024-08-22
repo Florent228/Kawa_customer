@@ -12,7 +12,7 @@ Cette API permet la gestion des clients, incluant la création, la lecture, la m
 
 **POST** `/login`
 
-Authentifie un client et renvoie un token JWT.
+Authentifie un client et renvoie un token JWT (accessToken).
 
 - **Corps de la requête :**
   ```json
