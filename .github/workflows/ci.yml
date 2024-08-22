@@ -49,8 +49,10 @@ jobs:
 
       - name: Push Docker image
         run: |
-          docker tag kawa_customer:latest ghcr.io/${{ github.repository_owner }}/kawa_customer:latest
-          docker push ghcr.io/${{ github.repository_owner }}/kawa_customer:latest
+          lower_repo_owner=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          docker tag kawa_customer:latest ghcr.io/${lower_repo_owner}/kawa_customer:latest
+          docker push ghcr.io/${lower_repo_owner}/kawa_customer:latest
+        
 
       - name: Clean up Docker images
         run: docker rmi kaw_customer:latest
