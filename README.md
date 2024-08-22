@@ -89,7 +89,6 @@ Récupère la liste de tous les clients.
       "email": "string",
       "adresse": "string"
     },
-    ...
   ]
   ```
 
@@ -195,7 +194,7 @@ Certaines routes de l'API (comme la récupération, la mise à jour, et la suppr
 1. Clonez ce dépôt : `git clone <URL du dépôt>`
 2. Naviguez dans le répertoire du projet : `cd <nom du projet>`
 3. Installez les dépendances : `npm install`
-4. Démarrez le serveur : `npm start`
+4. Démarrez le serveur : `npm run start` ou  `npm run dev`
 
 Le serveur sera disponible sur `http://localhost:3000/api`.
 
@@ -204,7 +203,7 @@ Le serveur sera disponible sur `http://localhost:3000/api`.
 Pour exécuter les tests, utilisez la commande :
 
 ```bash
-npm test
+npm run test
 ```
 
 ## Scipt de la table

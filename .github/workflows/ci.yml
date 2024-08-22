@@ -63,7 +63,7 @@ jobs:
 
       - name: Display Docker image path
         run: echo "ghcr.io/${{ github.repository_owner }}/kawa_customer:latest"
-
+        
   merge-to-main:
     needs: build-and-push-docker
     runs-on: ubuntu-latest
@@ -83,5 +83,5 @@ jobs:
         run: |
           git fetch origin
           git checkout main
-          git merge dev --no-ff --commit -m "Automated merge of dev into main"
+          git merge dev --no-ff --allow-unrelated-histories --commit -m "Automated merge of dev into main"
           git push origin main
