@@ -81,5 +81,6 @@ jobs:
 
       - name: Merge dev into main
         run: |
+          git show-ref
           git checkout main
           git merge dev --no-ff --allow-unrelated-histories --commit -m "Fusion automatisée de dev en main"
