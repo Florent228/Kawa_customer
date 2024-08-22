@@ -55,7 +55,13 @@ jobs:
         
 
       - name: Clean up Docker images
-        run: docker rmi kaw_customer:latest
+        run: |
+          if docker images | grep -q 'kawa_customer'; then
+            docker rmi kawa_customer:latest
+          else
+            echo "Image kawa_customer:latest not found. Skipping cleanup."
+          fi
+      
 
       - name: Display Docker image path
         run: echo "ghcr.io/${{ github.repository_owner }}/kawa_customer:latest"
