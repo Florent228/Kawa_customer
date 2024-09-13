@@ -12,7 +12,7 @@ Cette API permet la gestion des clients, incluant la création, la lecture, la m
 
 **POST** `/login`
 
-Authentifie un client et renvoie un token JWT (accessToken).
+Authentifie un client et renvoie un token JWT.
 
 - **Corps de la requête :**
   ```json
@@ -228,3 +228,7 @@ npm run test
 ## License
 
 Ce projet est sous licence MIT.
+
+## Auteur
+
+Florent ATCHEAKOU

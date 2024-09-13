@@ -7,6 +7,12 @@ const dbConn = require('../config/db.config');
 // Augmenter le timeout global pour Jest
 jest.setTimeout(50000);
 
+jest.mock('../config/rabbitmq', () => ({
+    publishToQueue: jest.fn((queueName, message) => {
+        console.log(`Message mocké envoyé à la queue ${queueName}: ${message}`);
+    }),
+}));
+
 describe('Tests de l\'Application', () => {
     let server;
     let authToken;
