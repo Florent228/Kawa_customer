@@ -32,18 +32,18 @@ describe('Tests de l\'Application', () => {
     });
 
     // Après tous les tests, fermer la connexion à la base de données
-    // afterAll(() => {
-    //     return new Promise((resolve, reject) => {
-    //         dbConn.end((err) => {
-    //             if (err) {
-    //                 console.error('Erreur lors de la fermeture de la connexion à la base de données:', err);
-    //                 return reject(err);
-    //             }
-    //             console.log('Connexion à la base de données fermée.');
-    //             resolve();
-    //         });
-    //     });
-    // });
+    afterAll(() => {
+        return new Promise((resolve, reject) => {
+            dbConn.end((err) => {
+                if (err) {
+                    console.error('Erreur lors de la fermeture de la connexion à la base de données:', err);
+                    return reject(err);
+                }
+                console.log('Connexion à la base de données fermée.');
+                resolve();
+            });
+        });
+    });
     
 
     describe('Tests de l\'Application', () => {
