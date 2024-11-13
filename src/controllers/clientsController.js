@@ -1,6 +1,7 @@
 const Client = require("../models/client");
 const bcrypt = require("bcryptjs");
 const { publishToQueue } = require('../config/rabbitmq');
+const jwt = require('jsonwebtoken');
 
 exports.create = (req, res) => {
     // Valider la requête
@@ -110,7 +111,6 @@ exports.delete = (req, res) => {
 
 
 
-const jwt = require('jsonwebtoken');
 
 // Authentification d'un client
 exports.login = (req, res) => {
@@ -136,10 +136,8 @@ exports.login = (req, res) => {
         }
 
         // durrée du tocken 24 heures
-        const token = jwt.sign({ id: client.id }, process.env.SECRET, {
-            // expiresIn: 86400  //24 H
-            expiresIn: 432000 //5jours //
-
+        const token = jwt.sign({ id: client.id , role: "0"}, process.env.SECRET, {
+            expiresIn: 86400  //24 H
         });
 
         res.status(200).send({
